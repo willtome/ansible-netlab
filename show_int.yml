@@ -1,0 +1,12 @@
+---
+- hosts: routers
+  gather_facts: no
+
+  tasks:
+  - ios_command:
+      commands:
+        - 'show run int {{ interface }}'
+    register: int_config
+
+  - debug:
+      msg: "{{int_config.stdout_lines}}"
