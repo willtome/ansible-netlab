@@ -1,10 +1,10 @@
 ---
 pod_networks:
-  - name: ten_net
-    vlan: 10
+  - name: POD1_VM_NET_100
+    vlan: 100
     subnet: 10.10.0.0/24
     routable: yes
-  - name: 101_net
+  - name: POD1_DATA_NET_101
     vlan: 101
     subnet: 10.10.1.0/24
     routable: no
