@@ -1,0 +1,7 @@
+---
+p2p:
+  address: 192.168.1.2/30
+  interface: GigabitEthernet0/1
+  peer: rtr1
+
+trunk_interface: GigabitEthernet0/2

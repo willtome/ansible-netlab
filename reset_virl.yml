@@ -1,0 +1,20 @@
+---
+- hosts: all
+  gather_facts: no
+  
+  tasks:
+  - ios_config:
+      lines:
+        - default interface g0/1
+        - default interface g0/2
+        - no router ospf 1
+        - no router bgp 1
+    when: ansible_network_os == 'ios'
+
+  - nxos_config:
+     lines:
+       - default interface Eth2/1
+       - no router ospf 1
+       - no router ospf 100
+       - no router bgp 1
+    when: ansible_network_os == 'nxos'

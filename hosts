@@ -1,0 +1,23 @@
+rtr1 ansible_host=172.16.1.61 ansible_network_os=ios
+rtr2 ansible_host=172.16.1.62 ansible_network_os=ios
+nxos1 ansible_host=172.16.1.59 ansible_network_os=nxos
+nxos2 ansible_host=172.16.1.60 ansible_network_os=nxos
+
+[routers]
+rtr1
+rtr2
+
+[switches]
+nxos1
+nxos2
+
+[pod1]
+rtr1
+nxos1
+
+[pod2]
+rtr2
+nxos2
+
+[all:vars]
+ansible_connection=local

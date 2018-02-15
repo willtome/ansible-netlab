@@ -1,0 +1,61 @@
+---
+- hosts: routers:switches
+  gather_facts: no
+
+  tasks:
+  - name: Configure Trunk Interface
+    ios_interface:
+      name: "{{ trunk_interface }}"
+      state: up
+    when: ansible_network_os == 'ios'
+
+  - name: Configure Trunk Interface
+    nxos_interface:
+      interface: "{{ trunk_interface }}"
+      mode: layer2
+    when: ansible_network_os == 'nxos'
+ 
+  - name: Router Configs
+    block: 
+    - ios_config:
+       lines:
+         - "encapsulation dot1Q {{item.vlan}}"
+         - "ip address {{ item.subnet | ipaddr('next_usable') }} {{ item.subnet | ipaddr('netmask') }}"
+       parents: "interface {{trunk_interface}}.{{ item.vlan}}"  
+      with_items: "{{ pod_networks }}"
+
+    - name: P2P Routing
+      ios_config:
+       lines: 
+         - "network {{ p2p.address | ipaddr('network') }} {{ p2p.address | ipaddr('wildcard') }} area 6"
+       parents: "router ospf {{ ospf_id }}"
+
+    - name: Configure OSPF
+      ios_config:
+       lines: 
+         - "network {{ item.subnet | ipaddr('network') }} {{ item.subnet | ipaddr('wildcard') }} area 6"
+       parents: "router ospf {{ ospf_id }}"
+      when: "{{ item.routable }}"
+      with_items: "{{ pod_networks }}"
+    
+    when: "'routers' in group_names"
+
+  - name: Switch Configs
+    block:
+    - nxos_vlan:
+       vlan_id: "{{ item.vlan }}"
+       name: "{{ item.name }}"
+       state: present
+      with_items: "{{ pod_networks }}"
+
+    - set_fact:
+        allowed_vlans: "{{ [item.vlan] + allowed_vlans | default([]) }}"
+      with_items: "{{ pod_networks }}"
+    
+    - nxos_switchport:
+        interface: "{{ trunk_interface }}"
+        mode: trunk
+        native_vlan: 1
+        trunk_allowed_vlans: "{{ allowed_vlans | join(',')}}"
+        state: present
+    when: "'switches' in group_names"
