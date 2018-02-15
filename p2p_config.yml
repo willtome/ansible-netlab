@@ -7,4 +7,7 @@
       lines:
         - "ip address {{ p2p.address | ipaddr('address') }} {{ p2p.address | ipaddr('netmask') }}"
         - "description P2P link with {{p2p.peer}}"
-      parents: "interface {{ p2p.interface }}" 
+      parents: "interface {{ p2p.interface }}"
+   
+   - net_ping:
+      dest: "{{ hostvars['p2p.peer']['p2p.address'] | ipaddr('address') }}" 
