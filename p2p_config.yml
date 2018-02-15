@@ -10,4 +10,4 @@
       parents: "interface {{ p2p.interface }}"
    
   - net_ping:
-     dest: "{{ hostvars[p2p.peer]['p2p.address'] | ipaddr('address') }}" 
+     dest: "{{ hostvars[p2p.peer]['p2p']['address'] | ipaddr('address') }}" 
