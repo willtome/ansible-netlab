@@ -1,7 +1,7 @@
-rtr1 ansible_host=172.16.1.61 ansible_network_os=ios
-rtr2 ansible_host=172.16.1.62 ansible_network_os=ios
-nxos1 ansible_host=172.16.1.59 ansible_network_os=nxos
-nxos2 ansible_host=172.16.1.60 ansible_network_os=nxos
+rtr1 ansible_host=172.16.1.69 ansible_network_os=ios
+rtr2 ansible_host=172.16.1.70 ansible_network_os=ios
+nxos1 ansible_host=172.16.1.67 ansible_network_os=nxos
+nxos2 ansible_host=172.16.1.68 ansible_network_os=nxos
 
 [routers]
 rtr1
